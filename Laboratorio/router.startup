@@ -1,0 +1,12 @@
+ip addr add 192.168.1.10/24 dev eth0
+ip addr add 192.168.2.10/24 dev eth1
+ip addr add 192.168.3.10/24 dev eth2
+ip addr add 192.168.4.10/24 dev eth3
+
+echo 1 > /proc/sys/net/ipv4/ip_forward
+
+iptables -t nat -A POSTROUTING -o eth5 -s 192.168.1.0/24 -j SNAT --to-source 172.17.0.2
+iptables -t nat -A POSTROUTING -o eth5 -s 192.168.2.0/24 -j SNAT --to-source 172.17.0.2
+iptables -t nat -A POSTROUTING -o eth5 -s 192.168.3.0/24 -j SNAT --to-source 172.17.0.2
+iptables -t nat -A POSTROUTING -o eth5 -s 192.168.4.0/24 -j SNAT --to-source 172.17.0.2
+
