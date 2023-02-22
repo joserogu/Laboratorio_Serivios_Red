@@ -1,2 +1,18 @@
 ip addr add 192.168.2.3/24 dev eth0
 route add default gw 192.168.2.10
+
+#Actualizo paquetes
+
+apt update
+
+#Instalo dnsmasq
+
+apt install dnsmasq -y
+
+cp /shared/dnsmasq.conf /etc/dnsmasq.conf
+
+cp /shared/custom.conf /etc/dnsmasq.d/custom.conf
+
+/etc/init.d/dnsmasq start
+
+
