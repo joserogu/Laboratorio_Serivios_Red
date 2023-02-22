@@ -1,2 +1,25 @@
 ip addr add 192.168.2.4/24 dev eth0
 route add default gw 192.168.2.10
+
+#Actualizo paquetes
+apt update
+
+#Instalo squid
+apt install squid -y
+
+cp /shared/backup_squid/squid.conf /etc/squid/squid.conf
+cp /shared/backup_squid/sysctl.conf /etc/sysctl.conf
+
+/etc/init.d/networking restart
+
+iptables -A INPUT -p tcp --dport 3128 -j ACCEPT
+iptables -A INPUT -p tcp --dport 3129 -j ACCEPT
+iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 80 -j REDIRECT --to-port 3129
+
+cp /shared/backup_squid/passwords /etc/squid/passwords
+
+#UFW
+apt install ufw -y
+ufw allow 3128
+
+/etc/init.d/squid start
