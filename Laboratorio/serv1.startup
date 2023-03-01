@@ -3,7 +3,7 @@ route add default gw 192.168.2.10
 
 #Actualizo paquetes
 
-apt update
+apt update -y
 
 #Instalo dnsmasq
 

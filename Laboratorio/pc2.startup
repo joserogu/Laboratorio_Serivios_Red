@@ -5,3 +5,14 @@ iface eth0 inet dhcp" >> /etc/network/interfaces
 
 route add default gw 192.168.1.10
 dhclient eth0
+
+apt update -y
+
+# Instalamos samba
+
+apt update && apt install samba samba-common smbclient -y
+
+# Iniciamos servicio de samba
+
+/etc/init.d/nmbd start
+/etc/init.d/smbd start

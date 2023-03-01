@@ -2,7 +2,7 @@ ip addr add 192.168.2.4/24 dev eth0
 route add default gw 192.168.2.10
 
 #Actualizo paquetes
-apt update
+apt update -y
 
 #Instalo squid
 apt install squid -y
