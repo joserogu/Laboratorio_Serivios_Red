@@ -23,3 +23,29 @@ iptables -t nat -A POSTROUTING -o eth5 -s 192.168.4.0/24 -j SNAT --to-source 172
 #Inicio el servidor DHCP
 
 /etc/init.d/isc-dhcp-server start
+
+#Instalo SQUID
+
+apt update && apt install squid -y
+
+cp /shared/backup_squid/squid.conf /etc/squid/squid.conf
+cp /shared/backup_squid/sysctl.conf /etc/sysctl.conf
+
+iptables -A INPUT -p tcp --dport 3128 -j ACCEPT
+
+iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 80 -j REDIRECT --to-port 3128
+iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 443 -j REDIRECT --to-port 3128
+
+/etc/init.d/squid start
+
+#Instalo webmin
+
+cp /shared/webmin/sources.list /etc/apt/sources.list
+wget -q -O- http://www.webmin.com/jcameron-key.asc | apt-key add
+
+apt update && apt install webmin -y
+
+(echo admin; echo admin) | passwd
+
+/etc/init.d/webmin start
+

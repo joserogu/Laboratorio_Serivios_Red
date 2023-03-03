@@ -8,11 +8,17 @@ dhclient eth0
 
 apt update
 
-# Instalamos samba
+#Establezco valores predeterminados para la instalación de samba
 
-apt update && apt install samba samba-common smbclient -y
+echo "samba-common samba-common/workgroup string  WORKGROUP" | debconf-set-selections
+echo "samba-common samba-common/dhcp boolean true" | debconf-set-selections
+echo "samba-common samba-common/do_debconf boolean true" | debconf-set-selections
 
-# Iniciamos servicio de samba
-
-/etc/init.d/nmbd start
+#Instalamos SAMBA
+apt update && apt install -y samba samba-common smbclient
+cp /shared/smb.conf /etc/samba/smb.conf
 /etc/init.d/smbd start
+
+#Instalo el cliente ftp
+
+apt update && apt install ftp -y

@@ -4,22 +4,24 @@ route add default gw 192.168.2.10
 #Actualizo paquetes
 apt update -y
 
-#Instalo squid
-apt install squid -y
+#Establezco valores predeterminados para la instalación de samba
 
-cp /shared/backup_squid/squid.conf /etc/squid/squid.conf
-cp /shared/backup_squid/sysctl.conf /etc/sysctl.conf
+echo "samba-common samba-common/workgroup string  WORKGROUP" | debconf-set-selections
+echo "samba-common samba-common/dhcp boolean true" | debconf-set-selections
+echo "samba-common samba-common/do_debconf boolean true" | debconf-set-selections
 
-/etc/init.d/networking restart
+#Instalamos SAMBA
+apt update && apt install -y samba samba-common smbclient
+cp /shared/samba2/smb.conf /etc/samba/smb.conf
+/etc/init.d/smbd start
 
-iptables -A INPUT -p tcp --dport 3128 -j ACCEPT
-iptables -A INPUT -p tcp --dport 3129 -j ACCEPT
-iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 80 -j REDIRECT --to-port 3129
+cp -R /shared/Configuracion /
+# Establezco contraseña para el usuario en samba siendo 'admin'
 
-cp /shared/backup_squid/passwords /etc/squid/passwords
+(echo admin; echo admin) | smbpasswd -s
 
-#UFW
-apt install ufw -y
-ufw allow 3128
+#Instalo el servicio de FTP
 
-/etc/init.d/squid start
+apt update && apt install vsftpd ftp -y
+
+cp /shared/ftp/vsftpd.conf /etc/vsftpd.conf
