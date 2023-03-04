@@ -22,3 +22,6 @@ cp /shared/smb.conf /etc/samba/smb.conf
 #Instalo el cliente ftp
 
 apt update && apt install ftp -y
+
+export http_proxy=http://192.168.2.10:3128
+export https_proxy=http://192.168.2.10:3128

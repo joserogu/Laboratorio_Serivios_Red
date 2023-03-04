@@ -25,3 +25,8 @@ cp -R /shared/Configuracion /
 apt update && apt install vsftpd ftp -y
 
 cp /shared/ftp/vsftpd.conf /etc/vsftpd.conf
+
+/etc/init.d/vsftpd start
+
+export http_proxy=http://192.168.2.10:3128
+export https_proxy=http://192.168.2.10:3128

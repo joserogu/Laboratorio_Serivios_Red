@@ -32,3 +32,6 @@ mkdir /Departamento
 #Instalo el cliente ftp
 
 apt update && apt install ftp -y
+
+export http_proxy=http://192.168.4.10:3128
+export https_proxy=http://192.168.4.10:3128
